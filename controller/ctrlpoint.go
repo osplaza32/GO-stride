@@ -12,28 +12,73 @@ import (
 )
 
 func Getpoint4user(c *gin.Context)  {
+	var cole []models.Colletion
+	userID := c.Param("id")
 
-
-}
-func Getallpoints(c *gin.Context)  {
-	var usuarios []models.Points
+	var as []string
+	var points []models.Points
+	var responde []ResponseGetallPoints
 	db, err := db.Conneccion()
 	defer db.Close()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	db.Find(&usuarios)
-	if len(usuarios) <= 0 {
+	db.Where("proyect = ? and user_id = ?","Stride",userID).Find(&cole)
+	for _,v := range cole{
+		as= append(as, v.ID)
+	}
+
+	db.Where("colletion_refer in (?)",as).Find(&points)
+	for _,v:= range points{
+		responde = append(responde,ResponseGetallPoints{Location:v.Location,CreatedAt:v.CreatedAt,Score:v.Score})
+
+	}
+	if len(points) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No Points found!"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": usuarios})
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": responde})
+
+
+}
+func Getallpoints(c *gin.Context)  {
+	var cole []models.Colletion
+	var as []string
+	var points []models.Points
+	var responde []ResponseGetallPoints
+	db, err := db.Conneccion()
+	defer db.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	db.Where("proyect = ?","Stride").Find(&cole)
+	for _,v := range cole{
+		as= append(as, v.ID)
+	}
+
+	db.Where("colletion_refer in (?)",as).Find(&points)
+	for _,v:= range points{
+		responde = append(responde,ResponseGetallPoints{Location:v.Location,CreatedAt:v.CreatedAt,Score:v.Score})
+
+	}
+	if len(points) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No Points found!"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": responde})
 
 
 
 
 
+
+}
+type ResponseGetallPoints struct{
+	Location gormGIS.GeoPoint `sql:"type:geometry(Geometry,4326)"`
+	CreatedAt time.Time
+	Score int32
 
 }
 func CreatePoint(c *gin.Context)  {
