@@ -37,27 +37,54 @@ func Getallpoints(c *gin.Context)  {
 
 }
 func CreatePoint(c *gin.Context)  {
-	value, err := strconv.ParseFloat(c.PostForm("scorre"), 32)
+
+	i, err := strconv.ParseInt(c.PostForm("scorre"), 10, 32)
 	if err != nil {
-		panic(fmt.Sprintf("%v", err))
-
+		panic(err)
 	}
-	score := float32(value)
-
-	u := models.Points{Location: gormGIS.GeoPoint{
-		Lat: 43.76857094631136,
-		Lng: 11.292383687705296,
-	},CreatedAt: time.Now(),
-		Score: score, UserID: c.PostForm("idu")}
+	scoreee:= int32(i)
 	db, err := db.Conneccion()
 	defer db.Close()
 	if err != nil {
 		fmt.Println(err)
+	}
+	exist,couuid :=GetColletion(c.PostForm("idu"))
+	u := models.Points{Location: gormGIS.GeoPoint{
+		Lat: 43.76857094631136,
+		Lng: 11.292383687705296,
+	},CreatedAt: time.Now(),
+		Score: scoreee }
+	if !exist {
+		u.ColletionRefer=couuid
+
+		}else{
+			cole :=models.Colletion{
+				CreatedAt:time.Now(),
+				UserID: c.PostForm("idu"),
+				Type: "Punto"}
+			db.Create(&cole)
+			u.ColletionRefer=cole.ID
+
+
 	}
 	db.Create(&u)
 	c.JSON(http.StatusCreated, gin.H{"status": http.StatusCreated, "message": "created successfully!", "resourceId": u.ID})
 
 }
 func GetespecificPoint(c *gin.Context)  {
+
+}
+func GetColletion(s string )(bool,string) {
+	db, err := db.Conneccion()
+	defer db.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+	colle := models.Colletion{}
+	db.Where(&models.Colletion{UserID: s, Proyect: "Stride"}).First(&colle)
+	return colle.IsEmpty(),colle.ID
+
+
+
 
 }

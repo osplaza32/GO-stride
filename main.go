@@ -21,7 +21,11 @@ func main() {
 
 	}
 	db.AutoMigrate(&models.User{})
+
+	db.AutoMigrate(&models.Colletion{})
+
 	db.AutoMigrate(&models.Points{})
+
 	router := gin.Default()
 	router.Use(cors.Default())
 	router.LoadHTMLGlob("templates/*.html")
