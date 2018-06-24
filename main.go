@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"net/http"
-	"github/osplaza32/gormgis/controller"
-	"github/osplaza32/gormgis/db"
-	"github/osplaza32/gormgis/models"
+	"./controller"
+	"./db"
+	"./models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -60,7 +60,7 @@ func main() {
 	{
 		v3.GET("",controller.Nominatimctrl)
 	}
-	router.Run()
+	router.Run(":8000")
 
 
 

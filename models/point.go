@@ -4,7 +4,7 @@ import (
 	"github.com/nferruzzi/gormGIS"
 	"time"
 	"fmt"
-	"github/osplaza32/gormgis/db"
+	"../db"
 )
 
 type Points struct {

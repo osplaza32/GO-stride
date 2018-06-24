@@ -3,10 +3,10 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"fmt"
-	"github/osplaza32/gormgis/db"
-	"github/osplaza32/gormgis/models"
+	"../db"
+	"../models"
 	"net/http"
-	"github.com/grindhold/gominatim"
+	"github.com/muesli/gominatim"
 )
 
 func AllCiclovias(c *gin.Context) {

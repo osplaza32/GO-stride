@@ -3,8 +3,8 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github/osplaza32/gormgis/models"
-	"github/osplaza32/gormgis/db"
+	"../models"
+	"../db"
 	"net/http"
 	"golang.org/x/crypto/bcrypt"
 )
